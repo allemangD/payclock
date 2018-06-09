@@ -26,9 +26,10 @@ body {
 button {
   font-weight: normal;
   padding: 0.25em;
-  border: none;
   background-color: #d3d3d3;
   font-size: medium;
+  border: none;
+  border-radius: 0.125em;
 }
 button:hover {
   background-color: #add8e6;
@@ -57,6 +58,7 @@ button:focus {
   }
   button {
     padding: 5px;
+    border-radius: 2.5px;
   }
   #laps > li:first-child {
     font-size: 37.5px;
@@ -74,6 +76,7 @@ button:focus {
   }
   button {
     padding: 10px;
+    border-radius: 5px;
   }
   #laps > li:first-child {
     font-size: 52.5px;
@@ -91,6 +94,7 @@ button:focus {
   }
   button {
     padding: 15px;
+    border-radius: 7.5px;
   }
   #laps > li:first-child {
     font-size: 67.5px;
