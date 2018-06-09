@@ -35,11 +35,26 @@
             margin: 0;
         }
 
+        #laps > li:first-child {
+            font-size: 2em;
+        }
+
+        #laps > li {
+            padding: 0;
+        }
+
+        #laps {
+            padding: 0;
+            list-style-type: none;
+            height: 3em;
+            overflow-y: paged-y;
+        }
+
         button {
             border: none;
             background: lightgray;
             padding: .5em;
-            border-radius: .25em;
+            margin: .1em 0;
         }
 
         button:hover {
@@ -52,35 +67,92 @@
     </style>
 
     <script>
-        let start;
-        let rate = 25.00;
+        let RATE = 25.00;
+        let main;
+        let laps;
+
+        class Lap {
+            constructor(start, end, ePay, eStart) {
+                this.start = start;
+                this.end = end;
+                this.ePay = ePay;
+                this.eStart = eStart;
+            }
+
+            pay() {
+                let end = this.end;
+                if (end == null) end = new Date();
+
+                let millis = (end - this.start);
+                let hours = millis / 1000 / 60 / 60;
+
+                return RATE * hours;
+            }
+
+            updatePay() {
+                this.ePay.html("$" + this.pay().toFixed(2));
+            }
+
+            updateStart() {
+                this.eStart
+                    .html(this.start.toLocaleTimeString())
+                    .attr("title", this.start.toLocaleString());
+            }
+        }
+
+        function getRate(doprompt = true) {
+            if (doprompt) {
+                let rate = parseFloat(prompt("hourly rate", RATE.toFixed(2)));
+                if (rate == null) return;
+                RATE = rate;
+            }
+            $(".rate").html("$" + RATE.toFixed(2));
+        }
+
+        function updateAllPay() {
+            main.updatePay();
+            laps.forEach(e => e.updatePay());
+
+            let t = setTimeout(updateAllPay, 10);
+        }
 
         function reset() {
-            start = new Date();
+            main = new Lap(new Date(), null, $(".pay"), $(".start"));
+            main.updateStart();
 
-            $(".start").html(start.toLocaleTimeString()).attr("title", start.toLocaleString());
+            clearLaps();
+        }
+
+        function addLap() {
+            let now = new Date();
+            if (laps.length > 0) laps[laps.length - 1].end = now;
+
+            let ePay = $("<span></span>");
+            let eStart = $("<span></span>");
+
+            let li = $("<li></li>")
+                .append(ePay)
+                .append(" (")
+                .append(eStart)
+                .append(")");
+
+            $("#laps").prepend(li);
+
+            let lap = new Lap(now, null, ePay, eStart);
+            lap.updateStart();
+
+            laps.push(lap);
+        }
+
+        function clearLaps() {
+            laps = [];
+            $("#laps").html("");
         }
 
         function init() {
+            getRate(false);
             reset();
-            updatePay();
-        }
-
-        function getRate() {
-            let rate_str = prompt("hourly rate", rate.toFixed(2));
-            if (rate_str == null) return;
-            rate = parseFloat(rate_str);
-        }
-
-        function updatePay() {
-            let millis = (new Date() - start);
-            let hours = millis / 1000 / 60 / 60;
-
-            let pay = rate * hours;
-            $(".pay").html("$" + pay.toFixed(2));
-            $(".rate").html("$" + rate.toFixed(2));
-
-            let t = setTimeout(updatePay, 10);
+            updateAllPay();
         }
     </script>
 
@@ -96,8 +168,14 @@
     </div>
 
     <div class="buttons">
+        <button onclick="addLap()">Lap</button>
+        <button onclick="clearLaps()">Clear</button>
         <button onclick="reset()">Reset</button>
         <button onclick="getRate()">Set Rate</button>
+    </div>
+
+    <div class="lapinfo">
+        <ul id="laps"></ul>
     </div>
 </div>
 
