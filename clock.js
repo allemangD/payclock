@@ -32,7 +32,7 @@ Lap.prototype.updateStart = function () {
 
 function getRate() {
     let rate = parseFloat(prompt("hourly rate", RATE.toFixed(2)));
-    if (rate == null) return;
+    if (isNaN(rate)) return;
     RATE = rate;
     $(".rate").html("$" + RATE.toFixed(2));
 }

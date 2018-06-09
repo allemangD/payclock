@@ -1,0 +1,67 @@
+#middle
+  width: 100%
+  align-content: center
+  text-align: center
+  position: absolute
+  color: #000
+  top: 50%
+  left: 50%
+  padding: 15px
+  -ms-transform: translateX(-50%) translateY(-50%)
+  -webkit-transform: translate(-50%, -50%)
+  transform: translate(-50%, -50%)
+
+  & > *
+    margin .5em 0
+
+body
+  font-family Roboto
+  font-weight lighter
+  font-size large
+
+.pay
+  font-weight normal
+  font-size xx-large
+
+button
+  font-weight normal
+  padding .5em
+  border none
+  background-color lightgray
+  font-size large
+
+  &:hover
+    background-color lightblue
+
+  &:focus
+    outline 0
+
+#laps
+  padding 0
+  margin 0
+  height 0
+
+  li
+    list-style none
+
+    &:first-child
+      font-weight normal
+      font-size x-large
+
+
+for i in 1..3
+  @media (min-width: 500 + i * 100 px)
+    body
+      font-size (15 + 10 * i px) * 1
+
+    button
+      font-size (10 + 5 * i px) * 1
+
+    button
+      padding 5 * i px
+
+    #laps > li:first-child
+      font-size (15 + 10 * i px) * 1.5
+
+    .pay
+      font-size (15 + 10 * i px) * 3
