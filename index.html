@@ -71,47 +71,46 @@
         let main;
         let laps;
 
-        class Lap {
-            constructor(start, end, ePay, eStart) {
-                this.start = start;
-                this.end = end;
-                this.ePay = ePay;
-                this.eStart = eStart;
-            }
-
-            pay() {
-                let end = this.end;
-                if (end == null) end = new Date();
-
-                let millis = (end - this.start);
-                let hours = millis / 1000 / 60 / 60;
-
-                return RATE * hours;
-            }
-
-            updatePay() {
-                this.ePay.html("$" + this.pay().toFixed(2));
-            }
-
-            updateStart() {
-                this.eStart
-                    .html(this.start.toLocaleTimeString())
-                    .attr("title", this.start.toLocaleString());
-            }
+        function Lap(start, end, ePay, eStart) {
+            this.start = start;
+            this.end = end;
+            this.ePay = ePay;
+            this.eStart = eStart;
         }
 
-        function getRate(doprompt = true) {
-            if (doprompt) {
-                let rate = parseFloat(prompt("hourly rate", RATE.toFixed(2)));
-                if (rate == null) return;
-                RATE = rate;
-            }
+        Lap.prototype.pay = function () {
+            let end = this.end;
+            if (end == null) end = new Date();
+
+            let millis = (end - this.start);
+            let hours = millis / 1000 / 60 / 60;
+
+            return RATE * hours;
+        };
+
+        Lap.prototype.updatePay = function () {
+            this.ePay.html("$" + this.pay().toFixed(2));
+        };
+
+        Lap.prototype.updateStart = function () {
+            this.eStart
+                .html(this.start.toLocaleTimeString())
+                .attr("title", this.start.toLocaleString());
+        };
+
+
+        function getRate() {
+            let rate = parseFloat(prompt("hourly rate", RATE.toFixed(2)));
+            if (rate == null) return;
+            RATE = rate;
             $(".rate").html("$" + RATE.toFixed(2));
         }
 
         function updateAllPay() {
             main.updatePay();
-            laps.forEach(e => e.updatePay());
+            laps.forEach(function (e) {
+                return e.updatePay();
+            });
 
             let t = setTimeout(updateAllPay, 10);
         }
@@ -150,7 +149,7 @@
         }
 
         function init() {
-            getRate(false);
+            $(".rate").html("$" + RATE.toFixed(2));
             reset();
             updateAllPay();
         }
