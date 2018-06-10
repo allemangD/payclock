@@ -77,6 +77,7 @@ function addLap() {
 function clearLaps() {
     laps = [];
     $("#laps").html("");
+    addLap();
 }
 
 function init() {
