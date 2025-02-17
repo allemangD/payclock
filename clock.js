@@ -81,6 +81,11 @@ function clearLaps() {
 }
 
 function init() {
+    let params = new URLSearchParams(window.location.search);
+    if (params.get('rate')) {
+        RATE = parseInt(params.get('rate'));
+    }
+
     $(".rate").html("$" + RATE.toFixed(2));
     reset();
     updateAllPay();
